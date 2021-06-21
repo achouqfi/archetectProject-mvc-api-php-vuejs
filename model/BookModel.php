@@ -6,8 +6,19 @@
     class BookModel{
         
         //select  
-        function select(){
-            $query ="SELECT * FROM `rendez_vous`";
+        function select($reference){
+            $query ="SELECT * FROM `rendez_vous` where reference_user='$reference'";
+            // die();
+            $Nobjet = new connection();
+            $con=$Nobjet->connect();
+            $result= $con->query($query);
+            return $result;
+        }
+
+        //select date
+        function selectDate($date){
+            $query ="SELECT `heure` FROM `rendez_vous` WHERE  date='$date'";
+            // die($query);
             $Nobjet = new connection();
             $con=$Nobjet->connect();
             $result= $con->query($query);

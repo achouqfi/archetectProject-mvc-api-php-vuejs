@@ -24,6 +24,6 @@
             $Nobjet = new connection();
             $con=$Nobjet->connect();
             $result= $con->query($query);
-            return $result->fetchAll(PDO::FETCH_ASSOC);
+            return $result->fetch(PDO::FETCH_ASSOC);
         }
     }

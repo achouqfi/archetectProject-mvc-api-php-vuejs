@@ -11,8 +11,23 @@ class Book
 	{
 		// header('Content-Type: application/json');
 		$objet= new BookModel();
+		$data = json_decode(file_get_contents("php://input"));
 		// $user= array();
-		$res = $objet->select()->fetchAll(PDO::FETCH_ASSOC);
+		// die(print_r($data));
+		$res = $objet->select($data->reference)->fetchAll(PDO::FETCH_ASSOC);
+		echo json_encode($res);
+	}
+
+	//select horaire
+	function selectHoraire()
+	{
+		// header('Content-Type: application/json');
+		$objet= new BookModel();
+		$data = json_decode(file_get_contents("php://input"));
+		// die(print_r($data));
+		// $user= array();
+		$res = $objet->selectDate($data->date)->fetchAll(PDO::FETCH_ASSOC);
+
 		echo json_encode($res);
 	}
 
@@ -24,34 +39,34 @@ class Book
 
     	$rdv=new BookModel();
 
-		if(!empty($data->date) && !empty($data->heure) && !empty($data->message) && !empty($data->reference_user))
-		{
+		// if(!empty($data->date) && !empty($data->heure) && !empty($data->message) && !empty($data->reference_user))
+		// {
 			$rdv->date = $data->date;
 			$rdv->heure=$data->heure;
 			$rdv->message=$data->message;
 			$rdv->reference_user=$data->reference_user;
 
-			$value=$rdv->insert($rdv->date,$rdv->heure,$rdv->message,$rdv->reference_user);
+			$rdv->insert($rdv->date,$rdv->heure,$rdv->message,$rdv->reference_user);
 
-			if($value)
-			{
-            // Ici la création a fonctionné
-            // On envoie un code 201
-            http_response_code(201);
-            echo json_encode(["message" => "L'ajout a été effectué".$value]);
-	        }else
-	        {
-	            // Ici la création n'a pas fonctionné
-	            // On envoie un code 503
-	            http_response_code(503);
-	            echo json_encode(["message" => "L'ajout n'a pas été effectué".$value]);         
-	        }
-		}else
-		{
-			// On gère l'erreur
-		    http_response_code(405);
-		    echo json_encode(["message" => "La méthode n'est pas autorisée"]);
-		}
+		// 	if($value)
+		// 	{
+        //     // Ici la création a fonctionné
+        //     // On envoie un code 201
+        //     http_response_code(201);
+        //     echo json_encode(["message" => "L'ajout a été effectué".$value]);
+	    //     }else
+	    //     {
+	    //         // Ici la création n'a pas fonctionné
+	    //         // On envoie un code 503
+	    //         http_response_code(503);
+	    //         echo json_encode(["message" => "L'ajout n'a pas été effectué".$value]);         
+	    //     }
+		// }else
+		// {
+		// 	// On gère l'erreur
+		//     http_response_code(405);
+		//     echo json_encode(["message" => "La méthode n'est pas autorisée"]);
+		// }
 	}
 
 
@@ -133,10 +148,10 @@ class Book
 
 	//delete
 	function delete()
-	{
+	{header("Access-Control-Allow-Origin: *");
 		// On récupère les informations envoyées
     	$data = json_decode(file_get_contents("php://input"));
-
+		
     	$rdv=new BookModel();
 
 		if(!empty($data->id))
@@ -144,7 +159,7 @@ class Book
 			$rdv->id = $data->id;
 			$value=$rdv->delete($rdv->id);
 			// print_r($value);
-			die($value);
+			// die($value);
 
 			if($value)
 			{
